@@ -1,24 +1,25 @@
 import React from 'react'
 
-import { useQuery } from '@tanstack/react-query'
-import Axios from 'axios'
+import useGetCatFact from './useGetCatFact'
 
 function Cat() {
-    const { data: catData, isLoading, isError, refetch } = useQuery({
-        queryKey: ["cat"],
-        queryFn: async () => {
-            return Axios.get("https://catfact.ninja/fact").then((res) => res.data);
-        },
-    });
+    const {catData,isError,isLoading,refetchData,error,status}=useGetCatFact("https://catfact.ninja/fact");
+    const refetch= refetchData;
+    
     if (isLoading) {
-        return <h1>Loading....</h1>
+        return <h5>Loading....</h5>
     }
     if (isError) {
-        return <h1>Sorry error while loa....</h1>
+        console.log(status)
+        console.log(error.message,error.name, error.stack)
+        return <h1>Sorry error while loading ...</h1>
     }
     return (
-        <div>
-            <h1>{catData?.fact}</h1>
+        <div style={{border:"1px solid black", margin: "3px 0 3px 0"}}>
+            <h1>Hook 2</h1>
+            <p>Fetching Data</p>
+
+            <h3>{catData?.fact}</h3>
             <h4>
                 <button onClick={refetch}>Update Data</button>
             </h4>
